@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>io.github.seeflood</groupId>
+    <artifactId>toy-rpc</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <version.slf4j>1.7.10</version.slf4j>
+        <version.spring>4.1.5.RELEASE</version.spring>
+        <version.netty>4.0.26.Final</version.netty>
+        <version.protostuff>1.0.9</version.protostuff>
+        <version.objenesis>2.1</version.objenesis>
+        <version.cglib>3.1</version.cglib>
+        <version.zookeeper>3.4.6</version.zookeeper>
+        <version.zkclient>0.4</version.zkclient>
+        <version.commons-lang>3.3.2</version.commons-lang>
+        <version.commons-collections>4.0</version.commons-collections>
+        <version.maven-compiler-plugin>3.2</version.maven-compiler-plugin>
+        <version.maven-surefire-plugin>2.18.1</version.maven-surefire-plugin>
+        <version.maven-source-plugin>2.4</version.maven-source-plugin>
+        <version.maven-javadoc-plugin>2.10.3</version.maven-javadoc-plugin>
+    </properties>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${version.spring}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${version.spring}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- Netty -->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>${version.netty}</version>
+        </dependency>
+        <!-- Protostuff -->
+        <dependency>
+            <groupId>com.dyuproject.protostuff</groupId>
+            <artifactId>protostuff-core</artifactId>
+            <version>${version.protostuff}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.dyuproject.protostuff</groupId>
+            <artifactId>protostuff-runtime</artifactId>
+            <version>${version.protostuff}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
+<!--        <dependency>-->
+<!--            <groupId>com.alibaba</groupId>-->
+<!--            <artifactId>fastjson</artifactId>-->
+<!--            <version>1.2.68</version>-->
+<!--        </dependency>-->
+
+    </dependencies>
+</project>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="toy.rpc.demo.server"/>
+
+    <context:property-placeholder location="classpath:rpc-server.properties"/>
+
+    <bean id="serviceRegistry" class="toy.rpc.framework.registry.impl.LocalFileServiceRegistry">
+    </bean>
+<!--    <bean id="serviceRegistry" class="toy.rpc.framework.registry.impl.zookeeper.ZookeeperServiceRegistry">-->
+<!--        <constructor-arg name="registryAddress" value="${rpc.registry_address}"/>-->
+<!--    </bean>-->
+
+    <bean id="rpcServer" class="toy.rpc.framework.transport.netty.NettyRpcServer">
+        <property name="serviceAddress" value="${rpc.service_address}"/>
+        <property name="serviceRegistry" ref="serviceRegistry"/>
+<!--        <property name="encoder" ref="encoder"/>-->
+<!--        <property name="decoder" ref="decoder"/>-->
+        <property name="localServiceContext" ref="localServiceContext"/>
+    </bean>
+<!--    <bean id="encoder" class="toy.rpc.framework.transport.netty.ProtobufCodec">-->
+<!--        <property name="genericClass" value="toy.rpc.framework.common.model.Response"/>-->
+<!--    </bean>-->
+<!--    <bean id="decoder" class="toy.rpc.framework.transport.netty.ProtobufCodec">-->
+<!--        <property name="genericClass" value="toy.rpc.framework.common.model.Invocation"/>-->
+<!--    </bean>-->
+    <bean id="localServiceContext" class="toy.rpc.framework.provider.LocalServiceContext">
+    </bean>
+
+</beans>

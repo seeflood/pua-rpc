@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:property-placeholder location="classpath:rpc-client.properties"/>
+
+    <bean id="loadBalanceStrategy" class="toy.rpc.framework.registry.load.balance.RandomLoadBalanceStrategy">
+    </bean>
+
+    <bean id="serviceDiscovery" class="toy.rpc.framework.registry.impl.LocalFileServiceDiscovery">
+        <constructor-arg name="loadBalanceStrategy" ref="loadBalanceStrategy"/>
+    </bean>
+<!--    <bean id="serviceDiscovery" class="toy.rpc.framework.registry.impl.zookeeper.ZooKeeperServiceDiscovery">-->
+<!--        <constructor-arg name="zkAddress" value="${rpc.registry_address}"/>-->
+<!--    </bean>-->
+
+    <bean id="rpcProxyFactory" class="toy.rpc.framework.consumer.RpcProxyFactory">
+        <property name="serviceDiscovery" ref="serviceDiscovery"/>
+        <property name="client" ref="client"/>
+    </bean>
+    <bean id="client" class="toy.rpc.framework.transport.netty.NettyClient">
+<!--        <property name="encoder" ref="encoder"/>-->
+<!--        <property name="decoder" ref="decoder"/>-->
+    </bean>
+<!--    <bean id="decoder" class="toy.rpc.framework.transport.netty.ProtobufCodec">-->
+<!--        <property name="genericClass" value="toy.rpc.framework.common.model.Response"/>-->
+<!--    </bean>-->
+<!--    <bean id="encoder" class="toy.rpc.framework.transport.netty.ProtobufCodec">-->
+<!--        <property name="genericClass" value="toy.rpc.framework.common.model.Invocation"/>-->
+<!--    </bean>-->
+</beans>

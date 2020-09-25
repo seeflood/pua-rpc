@@ -1,4 +1,4 @@
-## FuBao-RPC (福报RPC)
+## 福报RPC (FuBao-RPC)
 
 自己实现的RPC框架，和Spring做了集成。
 希望能通过RPC的方式将福报传达到分布式系统的每一个角落

@@ -9,28 +9,28 @@
 
     <context:property-placeholder location="classpath:rpc-client.properties"/>
 
-    <bean id="loadBalanceStrategy" class="toy.rpc.framework.registry.load.balance.RandomLoadBalanceStrategy">
+    <bean id="loadBalanceStrategy" class="pua.rpc.framework.registry.load.balance.RandomLoadBalanceStrategy">
     </bean>
 
-    <bean id="serviceDiscovery" class="toy.rpc.framework.registry.impl.LocalFileServiceDiscovery">
+    <bean id="serviceDiscovery" class="pua.rpc.framework.registry.impl.LocalFileServiceDiscovery">
         <constructor-arg name="loadBalanceStrategy" ref="loadBalanceStrategy"/>
     </bean>
-<!--    <bean id="serviceDiscovery" class="toy.rpc.framework.registry.impl.zookeeper.ZooKeeperServiceDiscovery">-->
+<!--    <bean id="serviceDiscovery" class="pua.rpc.framework.registry.impl.zookeeper.ZooKeeperServiceDiscovery">-->
 <!--        <constructor-arg name="zkAddress" value="${rpc.registry_address}"/>-->
 <!--    </bean>-->
 
-    <bean id="rpcProxyFactory" class="toy.rpc.framework.consumer.RpcProxyFactory">
+    <bean id="rpcProxyFactory" class="pua.rpc.framework.consumer.RpcProxyFactory">
         <property name="serviceDiscovery" ref="serviceDiscovery"/>
         <property name="client" ref="client"/>
     </bean>
-    <bean id="client" class="toy.rpc.framework.transport.netty.NettyClient">
+    <bean id="client" class="pua.rpc.framework.transport.netty.NettyClient">
 <!--        <property name="encoder" ref="encoder"/>-->
 <!--        <property name="decoder" ref="decoder"/>-->
     </bean>
-<!--    <bean id="decoder" class="toy.rpc.framework.transport.netty.ProtobufCodec">-->
-<!--        <property name="genericClass" value="toy.rpc.framework.common.model.Response"/>-->
+<!--    <bean id="decoder" class="pua.rpc.framework.transport.netty.ProtobufCodec">-->
+<!--        <property name="genericClass" value="pua.rpc.framework.common.model.Response"/>-->
 <!--    </bean>-->
-<!--    <bean id="encoder" class="toy.rpc.framework.transport.netty.ProtobufCodec">-->
-<!--        <property name="genericClass" value="toy.rpc.framework.common.model.Invocation"/>-->
+<!--    <bean id="encoder" class="pua.rpc.framework.transport.netty.ProtobufCodec">-->
+<!--        <property name="genericClass" value="pua.rpc.framework.common.model.Invocation"/>-->
 <!--    </bean>-->
 </beans>

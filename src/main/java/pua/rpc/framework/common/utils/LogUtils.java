@@ -1,10 +1,13 @@
 package pua.rpc.framework.common.utils;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.DelayQueue;
+import java.util.concurrent.Delayed;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -12,11 +15,11 @@ public class LogUtils {
     private static final String KEY_DELIMITER = "@";
 
     protected static class MonitorLog implements Runnable, Delayed {
-        String key;
-        Date second;
+        String               key;
+        Date                 second;
         Callable<MonitorLog> cleaner;
-        AtomicInteger cnt = new AtomicInteger();
-        AtomicLong totalRt = new AtomicLong();
+        AtomicInteger        cnt     = new AtomicInteger();
+        AtomicLong           totalRt = new AtomicLong();
 
         public MonitorLog(String key, Date second, Callable<MonitorLog> cleaner) {
             this.key = key;
@@ -28,7 +31,7 @@ public class LogUtils {
         public void run() {
             int count = cnt.get();
             LogUtils.info(this, "Monitor:key=" + key + " second=" + second + " count=" + count + " average rt=" + totalRt.get() / count);
-//            remove
+            //            remove
             try {
                 cleaner.call();
             } catch (Exception e) {
@@ -53,12 +56,12 @@ public class LogUtils {
         }
     }
 
-    private static final DelayQueue<MonitorLog> delayQueue = new DelayQueue<>();
+    private static final DelayQueue<MonitorLog>  delayQueue     = new DelayQueue<>();
     private static final Map<String, MonitorLog> key2MonitorLog = new ConcurrentHashMap<>();
 
-    static{
-        new Thread(()->{
-            while(true){
+    static {
+        new Thread(() -> {
+            while (true) {
                 try {
                     MonitorLog take = delayQueue.take();
                     take.run();
@@ -69,6 +72,7 @@ public class LogUtils {
             }
         }).start();
     }
+
     public static void monitor(Object obj, String key, int cnt, long rt) {
         SimpleDateFormat sdf = new SimpleDateFormat();// 格式化时间
         sdf.applyPattern("yyyy-MM-dd HH:mm:ss");
@@ -81,8 +85,12 @@ public class LogUtils {
                 monitorLog = key2MonitorLog.get(mapKey);
             } else {
                 monitorLog = new MonitorLog(key, sdf.parse(dateFormatted), () -> key2MonitorLog.remove(mapKey));
-                key2MonitorLog.put(mapKey, monitorLog);
-                delayQueue.add(monitorLog);
+                MonitorLog old = key2MonitorLog.putIfAbsent(mapKey, monitorLog);
+                if (old == null) {
+                    delayQueue.add(monitorLog);
+                } else {
+                    monitorLog = old;
+                }
             }
             monitorLog.addCount(rt);
         } catch (Exception e) {

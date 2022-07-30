@@ -1,10 +1,10 @@
 ## PUA rpc
 
-基于Netty的RPC框架，和Spring做了集成。
+一个会PUA你的RPC框架，基于Netty实现，和Spring做了集成。
 
-希望能通过RPC的方式将幸福传达到分布式系统的每一个角落。
+希望能通过RPC的方式将幸福传递到分布式系统的每一个角落。
 
-使用示例参见\rpc\demo目录下的用例
+使用示例见\rpc\demo目录下的用例
 
 ### Feature
 - 鼓励程序员

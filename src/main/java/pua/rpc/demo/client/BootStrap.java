@@ -10,6 +10,7 @@ public class BootStrap {
 
     public static void main(String[] args) throws Exception {
         ApplicationContext context = new ClassPathXmlApplicationContext("spring-client.xml");
+        
         RpcProxyFactory rpcProxy = context.getBean(RpcProxyFactory.class);
 
         HelloService helloService = rpcProxy.getProxy(HelloService.class);

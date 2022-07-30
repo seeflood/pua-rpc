@@ -18,19 +18,19 @@ import java.util.UUID;
 
 public class RpcProxyFactory {
     private ServiceDiscovery serviceDiscovery;
-    private Client client;
+    private Client           client;
 
     public <T> T getProxy(Class<T> interfaceClass) {
-        return (T) Proxy.newProxyInstance(interfaceClass.getClassLoader(), new Class<?>[]{interfaceClass},
+        return (T) Proxy.newProxyInstance(interfaceClass.getClassLoader(), new Class<?>[] {interfaceClass},
                 (Object proxy, Method method, Object[] args) -> {
-//            1. prepare request object
+                    //            1. prepare request object
                     Invocation invocation = new Invocation();
                     invocation.setRequestId(UUID.randomUUID().toString());
                     invocation.setInterfaceName(method.getDeclaringClass().getName());
                     invocation.setMethodName(method.getName());
                     invocation.setParameterTypes(method.getParameterTypes());
                     invocation.setParameters(args);
-//            2.get address
+                    //            2.get address
                     String serviceName = interfaceClass.getName();
                     URL url = serviceDiscovery.discover(serviceName);
                     if (url == null || StringUtils.isEmpty(url.getHost()) || StringUtils.isEmpty(url.getPort())) {
@@ -39,7 +39,7 @@ public class RpcProxyFactory {
                     String host = url.getHost();
                     String port = url.getPort();
                     LogUtils.info(this, "Prepare to send request.host:" + host + " port:" + port);
-//            3. send request
+                    //            3. send request
                     Response response = client.send(invocation, host, port);
                     if (response.hasException()) {
                         throw response.getException();

@@ -22,20 +22,21 @@ public abstract class RpcServer implements InitializingBean {
         if (serviceAddress == null || serviceRegistry == null) {
             throw new NullPointerException();
         }
+        // 1. get url to bind
         String[] split = serviceAddress.split(":");
         if (StringUtils.isEmpty(split[0]) || StringUtils.isEmpty(split[1])) {
             throw new IllegalArgumentException();
         }
         url = new URL(split[0], split[1]);
         try {
-//          2. start server
+            //          2. start server
             start();
-//          3. service register
+            //          3. service register
             Set<String> interfaceNames = localServiceContext.getHandlerMap().keySet();
             serviceRegistry.register(interfaceNames, serviceAddress);
-//            4.after register hook
+            //            4.after register hook
             afterRegister();
-//            5.hang
+            //            5.hang
             hang();
         } finally {
             close();
@@ -49,7 +50,6 @@ public abstract class RpcServer implements InitializingBean {
     protected void hang() throws IOException, InterruptedException {
         System.in.read();
     }
-
 
     protected abstract void start() throws InterruptedException;
 

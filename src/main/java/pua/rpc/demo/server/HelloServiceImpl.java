@@ -1,8 +1,8 @@
 package pua.rpc.demo.server;
 
-import pua.rpc.framework.provider.annotation.FubaoRPC;
+import pua.rpc.framework.provider.annotation.RPC;
 
-@FubaoRPC(HelloService.class)
+@RPC(HelloService.class)
 public class HelloServiceImpl implements HelloService {
 
     @Override

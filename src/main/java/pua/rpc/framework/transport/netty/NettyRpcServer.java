@@ -17,11 +17,11 @@ import pua.rpc.framework.provider.RpcServer;
 import java.io.IOException;
 
 public class NettyRpcServer extends RpcServer {
-    private EventLoopGroup boss;
-    private EventLoopGroup worker;
-    private ChannelFuture future;
+    private EventLoopGroup         boss;
+    private EventLoopGroup         worker;
+    private ChannelFuture          future;
     private ChannelOutboundHandler encoder;
-    private ChannelInboundHandler decoder;
+    private ChannelInboundHandler  decoder;
 
     @Override
     protected void close() {
@@ -44,25 +44,30 @@ public class NettyRpcServer extends RpcServer {
             @Override
             public void initChannel(SocketChannel channel) throws Exception {
                 ChannelPipeline pipeline = channel.pipeline();
-                ProtobufDecoder localDecoder=new ProtobufDecoder();
+                ProtobufDecoder localDecoder = new ProtobufDecoder();
                 localDecoder.setGenericClass(Invocation.class);
-                ProtobufEncoder localEncoder=new ProtobufEncoder();
+                ProtobufEncoder localEncoder = new ProtobufEncoder();
                 localEncoder.setGenericClass(Response.class);
-                pipeline.addLast(localDecoder); // 解码 RPC 请求
-                pipeline.addLast(localEncoder); // 编码 RPC 响应
-                pipeline.addLast(new ReflectionInvokeHandler(localServiceContext.getHandlerMap())); // 处理 RPC 请求
+                // 解码 RPC 请求 Invocation
+                // when receiving data
+                pipeline.addLast(localDecoder);
+                // 编码 RPC 响应 Response
+                // when sending data
+                pipeline.addLast(localEncoder);
+                // 处理 RPC 请求, 反射调指定 bean
+                pipeline.addLast(new ReflectionInvokeHandler(localServiceContext.getHandlerMap()));
             }
         });
         bootstrap.option(ChannelOption.SO_BACKLOG, 1024);
         bootstrap.childOption(ChannelOption.SO_KEEPALIVE, true);
 
         future = bootstrap.bind(url.getHost(), Integer.valueOf(url.getPort())).sync();
-        LogUtils.info(this,"Server started.host:"+url.getHost()+" port:"+url.getPort());
+        LogUtils.info(this, "Server started.host:" + url.getHost() + " port:" + url.getPort());
     }
 
     @Override
     protected void hang() throws IOException, InterruptedException {
-        LogUtils.info(this,"Hang until close.");
+        LogUtils.info(this, "Hang until close.");
         future.channel().closeFuture().sync();
     }
 

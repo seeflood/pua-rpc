@@ -13,23 +13,23 @@
 
     <bean id="serviceRegistry" class="pua.rpc.framework.registry.impl.LocalFileServiceRegistry">
     </bean>
-<!--    <bean id="serviceRegistry" class="ZookeeperServiceRegistry">-->
-<!--        <constructor-arg name="registryAddress" value="${rpc.registry_address}"/>-->
-<!--    </bean>-->
+    <!--    <bean id="serviceRegistry" class="ZookeeperServiceRegistry">-->
+    <!--        <constructor-arg name="registryAddress" value="${rpc.registry_address}"/>-->
+    <!--    </bean>-->
 
     <bean id="rpcServer" class="pua.rpc.framework.transport.netty.NettyRpcServer">
         <property name="serviceAddress" value="${rpc.service_address}"/>
         <property name="serviceRegistry" ref="serviceRegistry"/>
-<!--        <property name="encoder" ref="encoder"/>-->
-<!--        <property name="decoder" ref="decoder"/>-->
+        <!--        <property name="encoder" ref="encoder"/>-->
+        <!--        <property name="decoder" ref="decoder"/>-->
         <property name="localServiceContext" ref="localServiceContext"/>
     </bean>
-<!--    <bean id="encoder" class="pua.rpc.framework.transport.netty.ProtobufCodec">-->
-<!--        <property name="genericClass" value="Response"/>-->
-<!--    </bean>-->
-<!--    <bean id="decoder" class="pua.rpc.framework.transport.netty.ProtobufCodec">-->
-<!--        <property name="genericClass" value="Invocation"/>-->
-<!--    </bean>-->
+    <!--    <bean id="encoder" class="pua.rpc.framework.transport.netty.ProtobufCodec">-->
+    <!--        <property name="genericClass" value="Response"/>-->
+    <!--    </bean>-->
+    <!--    <bean id="decoder" class="pua.rpc.framework.transport.netty.ProtobufCodec">-->
+    <!--        <property name="genericClass" value="Invocation"/>-->
+    <!--    </bean>-->
     <bean id="localServiceContext" class="pua.rpc.framework.provider.LocalServiceContext">
     </bean>
 

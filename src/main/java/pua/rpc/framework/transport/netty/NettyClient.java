@@ -24,8 +24,8 @@ public class NettyClient implements Client {
         Semaphore semaphore = new Semaphore(0);
     }
 
-    private ChannelInboundHandler decoder;
-    private ChannelOutboundHandler encoder;
+    private ChannelInboundHandler      decoder;
+    private ChannelOutboundHandler     encoder;
     private Map<String, ResultWrapper> requestId2Result = new ConcurrentHashMap<>();
 
     @Override
@@ -44,8 +44,12 @@ public class NettyClient implements Client {
                     localDecoder.setGenericClass(Response.class);
                     ProtobufEncoder localEncoder = new ProtobufEncoder();
                     localEncoder.setGenericClass(Invocation.class);
-                    pipeline.addLast(localDecoder); // 解码 RPC 请求
-                    pipeline.addLast(localEncoder); // 编码 RPC 响应
+                    // decode
+                    // when receiving data
+                    pipeline.addLast(localDecoder);
+                    // encode
+                    // when sending data
+                    pipeline.addLast(localEncoder);
                     pipeline.addLast(new SimpleChannelInboundHandler<Response>() {
                         @Override
                         protected void channelRead0(ChannelHandlerContext ctx, Response msg) throws Exception {
@@ -62,16 +66,16 @@ public class NettyClient implements Client {
             });
 
             ChannelFuture future = bootstrap.connect(host, Integer.parseInt(port)).sync();
-//            prepare
+            //            prepare
             ResultWrapper wrapper = new ResultWrapper();
             requestId2Result.put(invocation.getRequestId(), wrapper);
-//            write
+            //            write
             Channel channel = future.channel();
             channel.writeAndFlush(invocation).sync();
             LogUtils.info(this, "Request was written into channel and flushed.Prepare to acquire semaphore.");
-//            read
+            //            wait until it can read
             wrapper.semaphore.acquire();
-//            短连接
+            //            短连接
             channel.closeFuture().sync();
             return wrapper.r;
         } finally {

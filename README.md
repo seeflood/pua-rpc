@@ -40,3 +40,14 @@ Received response,requestId:303ab856-ba4a-4f88-8e07-159d14812551 你不要凡事
 - 日志优化
 - 支持压缩算法
 - 支持自定义每个对象的序列化算法
+
+
+### Principle
+#### Wire protocal
+- length(4 bytes) 
+- payload
+
+Currently using short connections
+
+#### Serialization Protocal
+payload is encoded using protobuf
